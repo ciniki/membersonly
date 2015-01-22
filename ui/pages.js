@@ -65,23 +65,23 @@ function ciniki_membersonly_pages() {
 					'title':{'label':'Title', 'type':'text'},
 					'sequence':{'label':'Page Order', 'type':'text', 'size':'small'},
 				}},
-				'_synopsis':{'label':'Synopsis', 'aside':'yes', 'fields':{
+				'_synopsis':{'label':'Synopsis', 'fields':{
 					'synopsis':{'label':'', 'type':'textarea', 'size':'small', 'hidelabel':'yes'},
 				}},
-				'_content':{'label':'Content', 'aside':'yes', 'fields':{
+				'_content':{'label':'Content', 'fields':{
 					'content':{'label':'', 'type':'textarea', 'size':'large', 'hidelabel':'yes'},
 				}},
-				'images':{'label':'Gallery', 'type':'simplethumbs'},
-				'_images':{'label':'', 'type':'simplegrid', 'num_cols':1,
-					'addTxt':'Add Image',
-					'addFn':'M.ciniki_membersonly_pages.'+pn+'.editComponent(\'ciniki.membersonly.pageimages\',\'M.ciniki_membersonly_pages.'+pn+'.addDropImageRefresh();\',{\'add\':\'yes\'});',
-					},
-				'files':{'label':'Files',
+				'files':{'label':'Files', 'aside':'yes',
 					'type':'simplegrid', 'num_cols':1,
 					'headerValues':null,
 					'cellClasses':[''],
 					'addTxt':'Add File',
 					'addFn':'M.ciniki_membersonly_pages.'+pn+'.editComponent(\'ciniki.membersonly.pagefiles\',\'M.ciniki_membersonly_pages.'+pn+'.updateFiles();\',{\'file_id\':\'0\'});',
+					},
+				'images':{'label':'Gallery', 'aside':'yes', 'type':'simplethumbs'},
+				'_images':{'label':'', 'aside':'yes', 'type':'simplegrid', 'num_cols':1,
+					'addTxt':'Add Image',
+					'addFn':'M.ciniki_membersonly_pages.'+pn+'.editComponent(\'ciniki.membersonly.pageimages\',\'M.ciniki_membersonly_pages.'+pn+'.addDropImageRefresh();\',{\'add\':\'yes\'});',
 					},
 				'_child_title':{'label':'Child Pages Heading', 'fields':{
 					'child_title':{'label':'', 'hidelabel':'yes', 'type':'text'},
