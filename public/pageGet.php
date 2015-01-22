@@ -141,6 +141,7 @@ function ciniki_membersonly_pageGet($ciniki) {
 				. "FROM ciniki_membersonly_pages "
 				. "WHERE parent_id = '" . ciniki_core_dbQuote($ciniki, $args['page_id']) . "' "
 				. "AND business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+				. "ORDER BY sequence, title "
 				. "";
 			$rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.membersonly', array(
 				array('container'=>'pages', 'fname'=>'id', 'name'=>'page',

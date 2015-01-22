@@ -164,6 +164,18 @@ function ciniki_membersonly_pages() {
 			};
 			this[pn].editComponent = function(a,cb,args) {
 				if( this.page_id == 0 ) {
+					var p = this;
+					var c = this.serializeFormData('yes');
+					M.api.postJSONFormData('ciniki.membersonly.pageAdd', 
+						{'business_id':M.curBusinessID}, c, function(rsp) {
+							if( rsp.stat != 'ok' ) {
+								M.api.err(rsp);
+								return false;
+							}
+							p.page_id = rsp.id;
+							args['page_id'] = rsp.id;
+							M.startApp(a,null,cb,'mc',args);
+						});
 				} else {
 					args['page_id'] = this.page_id;
 					M.startApp(a,null,cb,'mc',args);
@@ -205,24 +217,6 @@ function ciniki_membersonly_pages() {
 			};
 
 			this[pn].childEdit = function(cid) {
-	//			this.edit.stackedData.push(this.edit.data);
-	//			var apicall = 'ciniki.membersonly.pageAdd';
-	//			if( this.edit.page_id > 0 ) {
-	//				var c = this.edit.serializeFormData('yes');
-	//			} else {
-	//				apicall = 'ciniki.membersonly.pageUpdate';
-	//				var c = this.edit.serializeFormData('no');
-	//			}
-
-	//			M.api.postJSONFormData(apicall,
-	//				{'business_id':M.curBusinessID, 'page_id':this.edit.page_id}, c, function(rsp) {
-	//					if( rsp.stat != 'ok' ) {
-	//						M.api.err(rsp);
-	//						return false;
-	//					}
-	//					M.ciniki_membersonly_pages.edit.page_id = rsp.id;
-	//					this.pageEdit('M.ciniki_
-	//				});
 				if( this.page_id == 0 ) {
 					var p = this;
 					var c = this.serializeFormData('yes');
@@ -232,7 +226,6 @@ function ciniki_membersonly_pages() {
 								M.api.err(rsp);
 								return false;
 							}
-							// FIXME: fix ref
 							p.page_id = rsp.id;
 							M.ciniki_membersonly_pages.pageEdit('M.ciniki_membersonly_pages.'+pn+'.updateChildren();',cid,p.page_id);
 						});
