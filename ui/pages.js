@@ -40,7 +40,7 @@ function ciniki_membersonly_pages() {
 			//
 			this[pn] = new M.panel('Page',
 				'ciniki_membersonly_pages', pn,
-				'mc', 'medium mediumaside', 'sectioned', 'ciniki.membersonly.pages.' + pn);
+				'mc', 'medium mediumaside', 'sectioned', 'ciniki.membersonly.pages.edit');
 			this[pn].data = {};	
 			this[pn].stackedData = [];
 			this[pn].page_id = pid;
