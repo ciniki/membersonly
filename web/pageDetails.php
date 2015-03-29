@@ -92,14 +92,28 @@ function ciniki_membersonly_web_pageDetails($ciniki, $settings, $business_id, $a
 	//
 	// Check if there are any children
 	//
-	$strsql = "SELECT id, title, "
-		. "primary_image_id, "
-		. "permalink, category, synopsis, content, "
-		. "IF(content<>'','yes','no') AS is_details "
-		. "FROM ciniki_membersonly_pages "
-		. "WHERE parent_id = '" . ciniki_core_dbQuote($ciniki, $page['id']) . "' "
-		. "AND business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
-		. "ORDER BY category, sequence, title "
+	$strsql = "SELECT p1.id, p1.title, "
+		. "p1.primary_image_id, "
+		. "p1.permalink, p1.category, p1.synopsis, p1.content, "
+		. "IF(p1.content<>'' OR COUNT(p2.id)>0 OR COUNT(f1.id)>0 OR COUNT(i1.id)>0,'yes','no') AS is_details, "
+		. "COUNT(p2.id) AS num_children "
+		. "FROM ciniki_membersonly_pages AS p1 "
+		. "LEFT JOIN ciniki_membersonly_pages AS p2 ON ("
+			. "p2.parent_id = p1.id "
+			. "AND p2.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+			. ") "
+		. "LEFT JOIN ciniki_membersonly_page_images AS i1 ON ("
+			. "i1.page_id = p1.id "
+			. "AND i1.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+			. ") "
+		. "LEFT JOIN ciniki_membersonly_page_files AS f1 ON ("
+			. "f1.page_id = p1.id "
+			. "AND f1.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+			. ") "
+		. "WHERE p1.parent_id = '" . ciniki_core_dbQuote($ciniki, $page['id']) . "' "
+		. "AND p1.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+		. "GROUP BY p1.id "
+		. "ORDER BY p1.category, p1.sequence, p1.title "
 		. "";
 	$rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.customers', array(
 //		array('container'=>'children', 'fname'=>'id',
@@ -108,7 +122,7 @@ function ciniki_membersonly_web_pageDetails($ciniki, $settings, $business_id, $a
 			'fields'=>array('name'=>'category')),
 		array('container'=>'list', 'fname'=>'id', 
 			'fields'=>array('id', 'title', 'permalink', 'image_id'=>'primary_image_id',
-				'synopsis', 'content', 'is_details')),
+				'synopsis', 'content', 'is_details', 'num_children')),
 		));
 	if( $rc['stat'] != 'ok' ) {
 		return $rc;
@@ -124,6 +138,7 @@ function ciniki_membersonly_web_pageDetails($ciniki, $settings, $business_id, $a
 					'id'=>$child['id'], 
 					'name'=>$child['title'], 
 					'list'=>array($cid=>$child),
+					'id_details'=>$child['is_details'],
 					);
 			}
 		} else {
