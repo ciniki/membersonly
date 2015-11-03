@@ -45,7 +45,7 @@ function ciniki_membersonly_pages() {
 			this[pn].stackedData = [];
 			this[pn].page_id = pid;
 			this[pn].sections = {
-				'_image':{'label':'', 'aside':'yes', 'fields':{
+				'_image':{'label':'', 'aside':'yes', 'type':'imageform', 'fields':{
 					'primary_image_id':{'label':'', 'type':'image_id', 'hidelabel':'yes', 
 						'controls':'all', 'history':'no', 
 						'addDropImage':function(iid) {
