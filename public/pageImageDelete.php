@@ -47,7 +47,7 @@ function ciniki_membersonly_pageImageDelete(&$ciniki) {
         return $rc;
     }
     if( !isset($rc['item']) ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2186', 'msg'=>'Image does not exist'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.membersonly.21', 'msg'=>'Image does not exist'));
     }
     $item = $rc['item'];
 

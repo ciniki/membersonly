@@ -46,12 +46,12 @@ function ciniki_membersonly_pageImageAdd(&$ciniki) {
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbUUID');
     $rc = ciniki_core_dbUUID($ciniki, 'ciniki.membersonly');
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2183', 'msg'=>'Unable to get a new UUID', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.membersonly.18', 'msg'=>'Unable to get a new UUID', 'err'=>$rc['err']));
     }
     $args['uuid'] = $rc['uuid'];
 
     if( $args['page_id'] <= 0 ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2184', 'msg'=>'No page specified'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.membersonly.19', 'msg'=>'No page specified'));
     }
    
     //
@@ -79,7 +79,7 @@ function ciniki_membersonly_pageImageAdd(&$ciniki) {
         return $rc;
     }
     if( $rc['num_rows'] > 0 ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2185', 'msg'=>'You already have an image with this name, please choose another name'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.membersonly.20', 'msg'=>'You already have an image with this name, please choose another name'));
     }
 
     //

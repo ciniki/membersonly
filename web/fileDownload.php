@@ -28,7 +28,7 @@ function ciniki_membersonly_web_fileDownload($ciniki, $business_id, $page_id, $f
         return $rc;
     }
     if( !isset($rc['file']) ) {
-        return array('stat'=>'noexist', 'err'=>array('pkg'=>'ciniki', 'code'=>'2192', 'msg'=>'Unable to find requested file'));
+        return array('stat'=>'noexist', 'err'=>array('code'=>'ciniki.membersonly.27', 'msg'=>'Unable to find requested file'));
     }
     $rc['file']['filename'] = $rc['file']['name'] . '.' . $rc['file']['extension'];
 

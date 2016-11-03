@@ -50,7 +50,7 @@ function ciniki_membersonly_pageAdd(&$ciniki) {
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbUUID');
     $rc = ciniki_core_dbUUID($ciniki, 'ciniki.membersonly');
     if( $rc['stat'] != 'ok' ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2169', 'msg'=>'Unable to get a new UUID', 'err'=>$rc['err']));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.membersonly.4', 'msg'=>'Unable to get a new UUID', 'err'=>$rc['err']));
     }
     $args['uuid'] = $rc['uuid'];
 
@@ -75,7 +75,7 @@ function ciniki_membersonly_pageAdd(&$ciniki) {
         return $rc;
     }
     if( $rc['num_rows'] > 0 ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2170', 'msg'=>'You already have page with this name, you must choose another.'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.membersonly.5', 'msg'=>'You already have page with this name, you must choose another.'));
     }
 
     //

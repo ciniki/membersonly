@@ -61,7 +61,7 @@ function ciniki_membersonly_pageUpdate(&$ciniki) {
         return $rc;
     }
     if( !isset($rc['item']) ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2190', 'msg'=>'Page not found'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.membersonly.25', 'msg'=>'Page not found'));
     }
     $item = $rc['item'];
 
@@ -83,7 +83,7 @@ function ciniki_membersonly_pageUpdate(&$ciniki) {
             return $rc;
         }
         if( $rc['num_rows'] > 0 ) {
-            return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2191', 'msg'=>'You already have page with this title, please choose another title.'));
+            return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.membersonly.26', 'msg'=>'You already have page with this title, please choose another title.'));
         }
     }
 

@@ -45,7 +45,7 @@ function ciniki_membersonly_web_pageDetails($ciniki, $settings, $business_id, $a
     } elseif( isset($args['page_id']) && $args['page_id'] != '' ) {
         $strsql .= "AND ciniki_membersonly_pages.id = '" . ciniki_core_dbQuote($ciniki, $args['page_id']) . "' ";
     } else {
-        return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'2193', 'msg'=>'I\'m sorry, we were unable to find the page you requested.'));
+        return array('stat'=>'404', 'err'=>array('code'=>'ciniki.membersonly.28', 'msg'=>'I\'m sorry, we were unable to find the page you requested.'));
     }
 
     if( isset($args['parent_id']) && $args['parent_id'] != '' ) {
@@ -66,7 +66,7 @@ function ciniki_membersonly_web_pageDetails($ciniki, $settings, $business_id, $a
         return $rc;
     }
     if( !isset($rc['page']) || count($rc['page']) < 1 ) {
-        return array('stat'=>'404', 'err'=>array('pkg'=>'ciniki', 'code'=>'2194', 'msg'=>"I'm sorry, but we can't find the page you requested."));
+        return array('stat'=>'404', 'err'=>array('code'=>'ciniki.membersonly.29', 'msg'=>"I'm sorry, but we can't find the page you requested."));
     }
     $page = array_pop($rc['page']);
 

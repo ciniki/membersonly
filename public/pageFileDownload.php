@@ -56,7 +56,7 @@ function ciniki_membersonly_pageFileDownload($ciniki) {
         return $rc;
     }
     if( !isset($rc['file']) ) {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2178', 'msg'=>'Unable to find file'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.membersonly.13', 'msg'=>'Unable to find file'));
     }
     $filename = $rc['file']['name'] . '.' . $rc['file']['extension'];
 
@@ -68,7 +68,7 @@ function ciniki_membersonly_pageFileDownload($ciniki) {
     if( $rc['file']['extension'] == 'pdf' ) {
         header('Content-Type: application/pdf');
     } else {
-        return array('stat'=>'fail', 'err'=>array('pkg'=>'ciniki', 'code'=>'2179', 'msg'=>'Unsupported file type'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.membersonly.14', 'msg'=>'Unsupported file type'));
     }
     // Specify Filename
     header('Content-Disposition: attachment;filename="' . $filename . '"');
