@@ -39,7 +39,7 @@ function ciniki_membersonly_pageList($ciniki) {
     //
     // Get the list of titles from the database
     //
-    $strsql = "SELECT id, title "
+    $strsql = "SELECT id, title, flags "
         . "FROM ciniki_membersonly_pages "
         . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
         . "AND parent_id = 0 "
@@ -48,7 +48,7 @@ function ciniki_membersonly_pageList($ciniki) {
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
     $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.membersonly', array(
         array('container'=>'pages', 'fname'=>'id', 'name'=>'page',
-            'fields'=>array('id', 'title')),
+            'fields'=>array('id', 'title', 'flags')),
         ));
     if( $rc['stat'] != 'ok' ) { 
         return $rc;

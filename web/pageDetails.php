@@ -18,6 +18,7 @@ function ciniki_membersonly_web_pageDetails($ciniki, $settings, $business_id, $a
         . "ciniki_membersonly_pages.title, "
         . "ciniki_membersonly_pages.permalink, "
         . "ciniki_membersonly_pages.sequence, "
+        . "ciniki_membersonly_pages.flags, "
         . "ciniki_membersonly_pages.primary_image_id, "
         . "ciniki_membersonly_pages.primary_image_caption, "
         . "ciniki_membersonly_pages.primary_image_url, "
@@ -55,7 +56,7 @@ function ciniki_membersonly_web_pageDetails($ciniki, $settings, $business_id, $a
     $rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.info', array(
         array('container'=>'page', 'fname'=>'id',
             'fields'=>array('id', 'parent_id', 
-                'title', 'permalink', 'sequence', 
+                'title', 'permalink', 'sequence', 'flags',
                 'image_id'=>'primary_image_id', 'image_caption'=>'primary_image_caption', 
                 'image_url'=>'primary_image_url', 'child_title', 'synopsis', 'content')),
         array('container'=>'images', 'fname'=>'image_id', 
@@ -78,6 +79,9 @@ function ciniki_membersonly_web_pageDetails($ciniki, $settings, $business_id, $a
         . "WHERE ciniki_membersonly_page_files.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
         . "AND ciniki_membersonly_page_files.page_id = '" . ciniki_core_dbQuote($ciniki, $page['id']) . "' "
         . "";
+    if( ($page['flags']&0x1000) == 0x1000 ) {
+        $strsql .= "ORDER BY name DESC ";
+    }
     $rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.info', array(
         array('container'=>'files', 'fname'=>'id', 
             'fields'=>array('id', 'name', 'extension', 'permalink', 'description')),

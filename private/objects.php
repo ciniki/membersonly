@@ -22,6 +22,7 @@ function ciniki_membersonly_objects($ciniki) {
             'permalink'=>array(),
             'category'=>array(),
             'sequence'=>array(),
+            'flags'=>array('name'=>'Flags', 'default'=>'0'),
             'primary_image_id'=>array('ref'=>'ciniki.images.image'),
             'primary_image_caption'=>array(),
             'primary_image_url'=>array(),

@@ -1,0 +1,5 @@
+#
+# Add the flags column to the table.
+#
+ALTER TABLE ciniki_membersonly_pages ADD COLUMN flags smallint unsigned not null AFTER sequence;
+ALTER TABLE ciniki_membersonly_pages COMMENT='v1.02';

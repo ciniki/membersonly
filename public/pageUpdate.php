@@ -26,6 +26,7 @@ function ciniki_membersonly_pageUpdate(&$ciniki) {
         'permalink'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Permalink'), 
         'category'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Category'),
         'sequence'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Sequence'),
+        'flags'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Flags'),
         'primary_image_id'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Image'),
         'primary_image_caption'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Image Caption'),
         'primary_image_url'=>array('required'=>'no', 'blank'=>'yes', 'name'=>'Image URL'),

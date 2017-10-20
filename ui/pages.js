@@ -78,6 +78,9 @@ function ciniki_membersonly_pages() {
                     'addTxt':'Add File',
                     'addFn':'M.ciniki_membersonly_pages.'+pn+'.editComponent(\'ciniki.membersonly.pagefiles\',\'M.ciniki_membersonly_pages.'+pn+'.updateFiles();\',{\'file_id\':\'0\'});',
                     },
+                '_files':{'label':'', 'aside':'yes', 'fields':{
+                    '_flags_10':{'label':'Reverse Order', 'type':'flagtoggle', 'bit':0x1000, 'field':'flags', 'default':'off'},
+                }},
                 'images':{'label':'Gallery', 'aside':'yes', 'type':'simplethumbs'},
                 '_images':{'label':'', 'aside':'yes', 'type':'simplegrid', 'num_cols':1,
                     'addTxt':'Add Image',
