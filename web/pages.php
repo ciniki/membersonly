@@ -9,7 +9,7 @@
 // Returns
 // -------
 //
-function ciniki_membersonly_web_pages($ciniki, $settings, $business_id, $args) {
+function ciniki_membersonly_web_pages($ciniki, $settings, $tnid, $args) {
     //
     // Find the list of pages with no parent
     //
@@ -19,7 +19,7 @@ function ciniki_membersonly_web_pages($ciniki, $settings, $business_id, $args) {
         . "'yes' AS is_details "
         . "FROM ciniki_membersonly_pages "
         . "WHERE parent_id = 0 "
-        . "AND business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "AND tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "ORDER BY sequence, title "
         . "";
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryIDTree');

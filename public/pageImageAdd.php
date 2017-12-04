@@ -16,7 +16,7 @@ function ciniki_membersonly_pageImageAdd(&$ciniki) {
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         'page_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'page'), 
         'name'=>array('required'=>'no', 'blank'=>'yes', 'default'=>'', 'name'=>'Title'), 
         'permalink'=>array('required'=>'no', 'default'=>'', 'blank'=>'yes', 'name'=>'Permalink'), 
@@ -32,10 +32,10 @@ function ciniki_membersonly_pageImageAdd(&$ciniki) {
 
     //  
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'membersonly', 'private', 'checkAccess');
-    $rc = ciniki_membersonly_checkAccess($ciniki, $args['business_id'], 'ciniki.membersonly.pageImageAdd'); 
+    $rc = ciniki_membersonly_checkAccess($ciniki, $args['tnid'], 'ciniki.membersonly.pageImageAdd'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     } 
@@ -71,7 +71,7 @@ function ciniki_membersonly_pageImageAdd(&$ciniki) {
     //
     $strsql = "SELECT id, name, permalink "
         . "FROM ciniki_membersonly_page_images "
-        . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+        . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
         . "AND permalink = '" . ciniki_core_dbQuote($ciniki, $args['permalink']) . "' "
         . "";
     $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.membersonly', 'image');
@@ -88,7 +88,7 @@ function ciniki_membersonly_pageImageAdd(&$ciniki) {
     if( !isset($args['sequence']) || $args['sequence'] == '' || $args['sequence'] == '0' ) {
         $strsql = "SELECT MAX(sequence) AS max_sequence "
             . "FROM ciniki_membersonly_page_images "
-            . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "AND page_id = '" . ciniki_core_dbQuote($ciniki, $args['page_id']) . "' "
             . "";
         $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.membersonly', 'seq');
@@ -106,6 +106,6 @@ function ciniki_membersonly_pageImageAdd(&$ciniki) {
     // Add the image to the database
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectAdd');
-    return ciniki_core_objectAdd($ciniki, $args['business_id'], 'ciniki.membersonly.page_image', $args, 0x07);
+    return ciniki_core_objectAdd($ciniki, $args['tnid'], 'ciniki.membersonly.page_image', $args, 0x07);
 }
 ?>

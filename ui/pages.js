@@ -1,5 +1,5 @@
 //
-// This app will handle the listing, additions and deletions of events.  These are associated business.
+// This app will handle the listing, additions and deletions of events.  These are associated tenant.
 //
 function ciniki_membersonly_pages() {
     //
@@ -99,7 +99,7 @@ function ciniki_membersonly_pages() {
                 }},
             };
             this[pn].fieldHistoryArgs = function(s, i) {
-                return {'method':'ciniki.membersonly.pageHistory', 'args':{'business_id':M.curBusinessID,
+                return {'method':'ciniki.membersonly.pageHistory', 'args':{'tnid':M.curTenantID,
                     'page_id':this.page_id, 'field':i}};
             };
             this[pn].sectionData = function(s) { 
@@ -134,7 +134,7 @@ function ciniki_membersonly_pages() {
                 if( this.page_id == 0 ) {
                     var c = this.serializeForm('yes');
                     var rsp = M.api.postJSON('ciniki.membersonly.pageAdd', 
-                        {'business_id':M.curBusinessID}, c);
+                        {'tnid':M.curTenantID}, c);
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);
                         return false;
@@ -142,7 +142,7 @@ function ciniki_membersonly_pages() {
                     this.page_id = rsp.id;
                 }
                 var rsp = M.api.getJSON('ciniki.membersonly.pageImageAdd', 
-                    {'business_id':M.curBusinessID, 'image_id':iid, 'page_id':this.page_id});
+                    {'tnid':M.curTenantID, 'image_id':iid, 'page_id':this.page_id});
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
@@ -151,7 +151,7 @@ function ciniki_membersonly_pages() {
             };
             this[pn].addDropImageRefresh = function() {
                 if( M.ciniki_membersonly_pages[pn].page_id > 0 ) {
-                    M.api.getJSONCb('ciniki.membersonly.pageGet', {'business_id':M.curBusinessID, 
+                    M.api.getJSONCb('ciniki.membersonly.pageGet', {'tnid':M.curTenantID, 
                         'page_id':M.ciniki_membersonly_pages[pn].page_id, 'images':'yes'}, function(rsp) {
                             if( rsp.stat != 'ok' ) {
                                 M.api.err(rsp);
@@ -170,7 +170,7 @@ function ciniki_membersonly_pages() {
                     var p = this;
                     var c = this.serializeFormData('yes');
                     M.api.postJSONFormData('ciniki.membersonly.pageAdd', 
-                        {'business_id':M.curBusinessID}, c, function(rsp) {
+                        {'tnid':M.curTenantID}, c, function(rsp) {
                             if( rsp.stat != 'ok' ) {
                                 M.api.err(rsp);
                                 return false;
@@ -187,7 +187,7 @@ function ciniki_membersonly_pages() {
 
             this[pn].updateFiles = function() {
                 if( this.page_id > 0 ) {
-                    M.api.getJSONCb('ciniki.membersonly.pageGet', {'business_id':M.curBusinessID, 
+                    M.api.getJSONCb('ciniki.membersonly.pageGet', {'tnid':M.curTenantID, 
                         'page_id':this.page_id, 'files':'yes'}, function(rsp) {
                             if( rsp.stat != 'ok' ) {
                                 M.api.err(rsp);
@@ -204,7 +204,7 @@ function ciniki_membersonly_pages() {
 
             this[pn].updateChildren = function() {
                 if( this.page_id > 0 ) {
-                    M.api.getJSONCb('ciniki.membersonly.pageGet', {'business_id':M.curBusinessID, 
+                    M.api.getJSONCb('ciniki.membersonly.pageGet', {'tnid':M.curTenantID, 
                         'page_id':this.page_id, 'children':'yes'}, function(rsp) {
                             if( rsp.stat != 'ok' ) {
                                 M.api.err(rsp);
@@ -224,7 +224,7 @@ function ciniki_membersonly_pages() {
                     var p = this;
                     var c = this.serializeFormData('yes');
                     M.api.postJSONFormData('ciniki.membersonly.pageAdd', 
-                        {'business_id':M.curBusinessID}, c, function(rsp) {
+                        {'tnid':M.curTenantID}, c, function(rsp) {
                             if( rsp.stat != 'ok' ) {
                                 M.api.err(rsp);
                                 return false;
@@ -244,7 +244,7 @@ function ciniki_membersonly_pages() {
                     var c = this.serializeFormData('no');
                     if( c != null ) {
                         M.api.postJSONFormData('ciniki.membersonly.pageUpdate', 
-                            {'business_id':M.curBusinessID, 'page_id':this.page_id}, c, function(rsp) {
+                            {'tnid':M.curTenantID, 'page_id':this.page_id}, c, function(rsp) {
                                 if( rsp.stat != 'ok' ) {
                                     M.api.err(rsp);
                                     return false;
@@ -257,7 +257,7 @@ function ciniki_membersonly_pages() {
                 } else {
                     var c = this.serializeFormData('yes');
                     M.api.postJSONFormData('ciniki.membersonly.pageAdd', 
-                        {'business_id':M.curBusinessID}, c, function(rsp) {
+                        {'tnid':M.curTenantID}, c, function(rsp) {
                             if( rsp.stat != 'ok' ) {
                                 M.api.err(rsp);
                                 return false;
@@ -269,7 +269,7 @@ function ciniki_membersonly_pages() {
             this[pn].deletePage = function() {
                 var p = this;
                 if( confirm('Are you sure you want to delete this page? All files and images will also be removed from this page.') ) {
-                    M.api.getJSONCb('ciniki.membersonly.pageDelete', {'business_id':M.curBusinessID, 
+                    M.api.getJSONCb('ciniki.membersonly.pageDelete', {'tnid':M.curTenantID, 
                         'page_id':p.page_id}, function(rsp) {
                             if( rsp.stat != 'ok' ) {
                                 M.api.err(rsp);
@@ -326,7 +326,7 @@ function ciniki_membersonly_pages() {
     }
 
     this.showMenu = function(cb) {
-        M.api.getJSONCb('ciniki.membersonly.pageList', {'business_id':M.curBusinessID, 
+        M.api.getJSONCb('ciniki.membersonly.pageList', {'tnid':M.curTenantID, 
             'parent_id':'0'}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
@@ -346,7 +346,7 @@ function ciniki_membersonly_pages() {
     };
 
     this.pageEdit = function(cb, pid, parent_id) {
-        M.api.getJSONCb('ciniki.membersonly.pageGet', {'business_id':M.curBusinessID,
+        M.api.getJSONCb('ciniki.membersonly.pageGet', {'tnid':M.curTenantID,
             'page_id':pid, 'images':'yes', 'files':'yes', 
                 'children':'yes', 'parentlist':'yes'}, function(rsp) {
                 if( rsp.stat != 'ok' ) {

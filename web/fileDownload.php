@@ -7,7 +7,7 @@
 // Returns
 // -------
 //
-function ciniki_membersonly_web_fileDownload($ciniki, $business_id, $page_id, $file_permalink) {
+function ciniki_membersonly_web_fileDownload($ciniki, $tnid, $page_id, $file_permalink) {
 
     //
     // Get the file details
@@ -19,7 +19,7 @@ function ciniki_membersonly_web_fileDownload($ciniki, $business_id, $page_id, $f
         . "ciniki_membersonly_page_files.binary_content "
         . "FROM ciniki_membersonly_page_files "
         . "WHERE ciniki_membersonly_page_files.page_id = '" . ciniki_core_dbQuote($ciniki, $page_id) . "' "
-        . "AND ciniki_membersonly_page_files.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "AND ciniki_membersonly_page_files.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "AND CONCAT_WS('.', ciniki_membersonly_page_files.permalink, ciniki_membersonly_page_files.extension) = '" . ciniki_core_dbQuote($ciniki, $file_permalink) . "' "
         . "AND (ciniki_membersonly_page_files.webflags&0x01) = 0 "      // Make sure file is to be visible
         . "";

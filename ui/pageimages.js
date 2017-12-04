@@ -38,7 +38,7 @@ function ciniki_membersonly_pageimages() {
             return ''; 
         };
         this.edit.fieldHistoryArgs = function(s, i) {
-            return {'method':'ciniki.membersonly.pageImageHistory', 'args':{'business_id':M.curBusinessID, 
+            return {'method':'ciniki.membersonly.pageImageHistory', 'args':{'tnid':M.curTenantID, 
                 'page_image_id':this.page_image_id, 'field':i}};
         };
         this.edit.addDropImage = function(iid) {
@@ -75,7 +75,7 @@ function ciniki_membersonly_pageimages() {
         if( eid != null ) { this.edit.page_id = eid; }
         if( this.edit.page_image_id > 0 ) {
             var rsp = M.api.getJSONCb('ciniki.membersonly.pageImageGet', 
-                {'business_id':M.curBusinessID, 'page_image_id':this.edit.page_image_id}, function(rsp) {
+                {'tnid':M.curTenantID, 'page_image_id':this.edit.page_image_id}, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);
                         return false;
@@ -98,7 +98,7 @@ function ciniki_membersonly_pageimages() {
             var c = this.edit.serializeFormData('no');
             if( c != '' ) {
                 var rsp = M.api.postJSONFormData('ciniki.membersonly.pageImageUpdate', 
-                    {'business_id':M.curBusinessID, 
+                    {'tnid':M.curTenantID, 
                     'page_image_id':this.edit.page_image_id}, c,
                         function(rsp) {
                             if( rsp.stat != 'ok' ) {
@@ -114,7 +114,7 @@ function ciniki_membersonly_pageimages() {
         } else {
             var c = this.edit.serializeFormData('yes');
             var rsp = M.api.postJSONFormData('ciniki.membersonly.pageImageAdd', 
-                {'business_id':M.curBusinessID, 'page_id':this.edit.page_id}, c,
+                {'tnid':M.curTenantID, 'page_id':this.edit.page_id}, c,
                     function(rsp) {
                         if( rsp.stat != 'ok' ) {
                             M.api.err(rsp);
@@ -128,7 +128,7 @@ function ciniki_membersonly_pageimages() {
 
     this.deleteImage = function() {
         if( confirm('Are you sure you want to delete this image?') ) {
-            var rsp = M.api.getJSONCb('ciniki.membersonly.pageImageDelete', {'business_id':M.curBusinessID, 
+            var rsp = M.api.getJSONCb('ciniki.membersonly.pageImageDelete', {'tnid':M.curTenantID, 
                 'page_image_id':this.edit.page_image_id}, function(rsp) {
                     if( rsp.stat != 'ok' ) {
                         M.api.err(rsp);

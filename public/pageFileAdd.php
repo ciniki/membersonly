@@ -8,7 +8,7 @@
 // ---------
 // api_key:
 // auth_token:
-// business_id:         The ID of the business to add the file to.
+// tnid:         The ID of the tenant to add the file to.
 // page_id:         The ID of the page the file is attached to.
 // name:                The name of the file.
 // description:         (optional) The extended description of the file, can be much longer than the name.
@@ -27,7 +27,7 @@ function ciniki_membersonly_pageFileAdd(&$ciniki) {
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         'page_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Page'),
         'name'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Name'), 
         'description'=>array('required'=>'no', 'default'=>'', 'blank'=>'yes', 'name'=>'Description'), 
@@ -44,10 +44,10 @@ function ciniki_membersonly_pageFileAdd(&$ciniki) {
 
     //  
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'membersonly', 'private', 'checkAccess');
-    $rc = ciniki_membersonly_checkAccess($ciniki, $args['business_id'], 'ciniki.membersonly.pageFileAdd'); 
+    $rc = ciniki_membersonly_checkAccess($ciniki, $args['tnid'], 'ciniki.membersonly.pageFileAdd'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
@@ -57,7 +57,7 @@ function ciniki_membersonly_pageFileAdd(&$ciniki) {
     //
     $strsql = "SELECT id, name, permalink "
         . "FROM ciniki_membersonly_page_files "
-        . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+        . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
         . "AND page_id = '" . ciniki_core_dbQuote($ciniki, $args['page_id']) . "' "
         . "AND permalink = '" . ciniki_core_dbQuote($ciniki, $args['permalink']) . "' "
         . "";
@@ -99,6 +99,6 @@ function ciniki_membersonly_pageFileAdd(&$ciniki) {
     // Add the file to the database
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectAdd');
-    return ciniki_core_objectAdd($ciniki, $args['business_id'], 'ciniki.membersonly.page_file', $args, 0x07);
+    return ciniki_core_objectAdd($ciniki, $args['tnid'], 'ciniki.membersonly.page_file', $args, 0x07);
 }
 ?>

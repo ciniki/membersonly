@@ -7,7 +7,7 @@
 // ---------
 // api_key:
 // auth_token:
-// business_id:         The ID of the business.
+// tnid:         The ID of the tenant.
 //
 // Returns
 // -------
@@ -18,7 +18,7 @@ function ciniki_membersonly_pageGet($ciniki) {
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
-        'business_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Business'), 
+        'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
         'page_id'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Page'),
         'parent_id'=>array('required'=>'no', 'default'=>'0', 'blank'=>'no', 'name'=>'Parent'),
         'images'=>array('required'=>'no', 'blank'=>'no', 'name'=>'Images'),
@@ -33,10 +33,10 @@ function ciniki_membersonly_pageGet($ciniki) {
 
     //  
     // Make sure this module is activated, and
-    // check permission to run this function for this business
+    // check permission to run this function for this tenant
     //  
     ciniki_core_loadMethod($ciniki, 'ciniki', 'membersonly', 'private', 'checkAccess');
-    $rc = ciniki_membersonly_checkAccess($ciniki, $args['business_id'], 'ciniki.membersonly.pageGet'); 
+    $rc = ciniki_membersonly_checkAccess($ciniki, $args['tnid'], 'ciniki.membersonly.pageGet'); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
@@ -63,7 +63,7 @@ function ciniki_membersonly_pageGet($ciniki) {
             . "ciniki_membersonly_pages.synopsis, "
             . "ciniki_membersonly_pages.content "
             . "FROM ciniki_membersonly_pages "
-            . "WHERE ciniki_membersonly_pages.business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "WHERE ciniki_membersonly_pages.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "AND ciniki_membersonly_pages.id = '" . ciniki_core_dbQuote($ciniki, $args['page_id']) . "' "
             . "";
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryTree');
@@ -86,7 +86,7 @@ function ciniki_membersonly_pageGet($ciniki) {
             $strsql = "SELECT id, name, image_id, webflags "
                 . "FROM ciniki_membersonly_page_images "
                 . "WHERE page_id = '" . ciniki_core_dbQuote($ciniki, $args['page_id']) . "' "
-                . "AND business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+                . "AND tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
                 . "";
             $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.membersonly', array(
                 array('container'=>'images', 'fname'=>'id', 'name'=>'image',
@@ -100,7 +100,7 @@ function ciniki_membersonly_pageGet($ciniki) {
                 ciniki_core_loadMethod($ciniki, 'ciniki', 'images', 'private', 'loadCacheThumbnail');
                 foreach($page['images'] as $inum => $img) {
                     if( isset($img['image']['image_id']) && $img['image']['image_id'] > 0 ) {
-                        $rc = ciniki_images_loadCacheThumbnail($ciniki, $args['business_id'], 
+                        $rc = ciniki_images_loadCacheThumbnail($ciniki, $args['tnid'], 
                             $img['image']['image_id'], 75);
                         if( $rc['stat'] != 'ok' ) {
                             return $rc;
@@ -117,7 +117,7 @@ function ciniki_membersonly_pageGet($ciniki) {
         if( isset($args['files']) && $args['files'] == 'yes' ) {
             $strsql = "SELECT id, name, extension, permalink "
                 . "FROM ciniki_membersonly_page_files "
-                . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+                . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
                 . "AND ciniki_membersonly_page_files.page_id = '" . ciniki_core_dbQuote($ciniki, $args['page_id']) . "' "
                 . "";
             if( isset($page['flags']) && ($page['flags']&0x1000) == 0x1000 ) {
@@ -144,7 +144,7 @@ function ciniki_membersonly_pageGet($ciniki) {
             $strsql = "SELECT id, title "
                 . "FROM ciniki_membersonly_pages "
                 . "WHERE parent_id = '" . ciniki_core_dbQuote($ciniki, $args['page_id']) . "' "
-                . "AND business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+                . "AND tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
                 . "ORDER BY sequence, title "
                 . "";
             $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.membersonly', array(
@@ -163,7 +163,7 @@ function ciniki_membersonly_pageGet($ciniki) {
     } else {
         $strsql = "SELECT MAX(sequence) AS sequence "
             . "FROM ciniki_membersonly_pages "
-            . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "AND parent_id = '" . ciniki_core_dbQuote($ciniki, $args['parent_id']) . "' "
             . "";
         $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.membersonly', 'max');
@@ -197,7 +197,7 @@ function ciniki_membersonly_pageGet($ciniki) {
     if( isset($args['parentlist']) && $args['parentlist'] == 'yes' ) {
         $strsql = "SELECT id, parent_id, title "
             . "FROM ciniki_membersonly_pages "
-            . "WHERE business_id = '" . ciniki_core_dbQuote($ciniki, $args['business_id']) . "' "
+            . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
             . "ORDER BY parent_id, sequence, title ";
         ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQueryIDTree');
         $rc = ciniki_core_dbHashQueryIDTree($ciniki, $strsql, 'ciniki.membersonly', array(

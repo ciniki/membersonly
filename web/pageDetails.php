@@ -9,7 +9,7 @@
 // Returns
 // -------
 //
-function ciniki_membersonly_web_pageDetails($ciniki, $settings, $business_id, $args) {
+function ciniki_membersonly_web_pageDetails($ciniki, $settings, $tnid, $args) {
     //
     // Get the main information
     //
@@ -33,10 +33,10 @@ function ciniki_membersonly_web_pageDetails($ciniki, $settings, $business_id, $a
         . "FROM ciniki_membersonly_pages "
         . "LEFT JOIN ciniki_membersonly_page_images ON ("
             . "ciniki_membersonly_pages.id = ciniki_membersonly_page_images.page_id "
-            . "AND ciniki_membersonly_pages.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+            . "AND ciniki_membersonly_pages.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
             . "AND (ciniki_membersonly_page_images.webflags&0x01) = 0 "
             . ") "
-        . "WHERE ciniki_membersonly_pages.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "WHERE ciniki_membersonly_pages.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "";
     //
     // Permalink or Content Type must be specified
@@ -76,7 +76,7 @@ function ciniki_membersonly_web_pageDetails($ciniki, $settings, $business_id, $a
     //
     $strsql = "SELECT id, name, extension, permalink, description "
         . "FROM ciniki_membersonly_page_files "
-        . "WHERE ciniki_membersonly_page_files.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "WHERE ciniki_membersonly_page_files.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "AND ciniki_membersonly_page_files.page_id = '" . ciniki_core_dbQuote($ciniki, $page['id']) . "' "
         . "";
     if( ($page['flags']&0x1000) == 0x1000 ) {
@@ -104,18 +104,18 @@ function ciniki_membersonly_web_pageDetails($ciniki, $settings, $business_id, $a
         . "FROM ciniki_membersonly_pages AS p1 "
         . "LEFT JOIN ciniki_membersonly_pages AS p2 ON ("
             . "p2.parent_id = p1.id "
-            . "AND p2.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+            . "AND p2.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
             . ") "
         . "LEFT JOIN ciniki_membersonly_page_images AS i1 ON ("
             . "i1.page_id = p1.id "
-            . "AND i1.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+            . "AND i1.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
             . ") "
         . "LEFT JOIN ciniki_membersonly_page_files AS f1 ON ("
             . "f1.page_id = p1.id "
-            . "AND f1.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+            . "AND f1.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
             . ") "
         . "WHERE p1.parent_id = '" . ciniki_core_dbQuote($ciniki, $page['id']) . "' "
-        . "AND p1.business_id = '" . ciniki_core_dbQuote($ciniki, $business_id) . "' "
+        . "AND p1.tnid = '" . ciniki_core_dbQuote($ciniki, $tnid) . "' "
         . "GROUP BY p1.id "
         . "ORDER BY p1.category, p1.sequence, p1.title "
         . "";
