@@ -85,13 +85,13 @@ function ciniki_membersonly_pageFileAdd(&$ciniki) {
     }
 
     $args['org_filename'] = $_FILES['uploadfile']['name'];
-    $args['extension'] = preg_replace('/^.*\.([a-zA-Z]+)$/', '$1', $args['org_filename']);
+    $args['extension'] = preg_replace('/^.*\.([a-zA-Z0-9]+)$/', '$1', $args['org_filename']);
 
     //
     // Check the extension is a PDF, currently only accept PDF files
     //
-    if( $args['extension'] != 'pdf' ) {
-        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.membersonly.11', 'msg'=>'The file must be a PDF file.'));
+    if( $args['extension'] != 'pdf' && $args['extension'] != 'mp3' ) {
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.membersonly.11', 'msg'=>'Not a supported file type.'));
     }
     $args['binary_content'] = file_get_contents($_FILES['uploadfile']['tmp_name']);
 

@@ -67,6 +67,8 @@ function ciniki_membersonly_pageFileDownload($ciniki) {
 
     if( $rc['file']['extension'] == 'pdf' ) {
         header('Content-Type: application/pdf');
+    } elseif( $rc['file']['extension'] == 'mp3' ) {
+        header('Content-Type: audio/mpeg');
     } else {
         return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.membersonly.14', 'msg'=>'Unsupported file type'));
     }
