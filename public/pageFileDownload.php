@@ -42,13 +42,17 @@ function ciniki_membersonly_pageFileDownload($ciniki) {
     //
     // Get the uuid for the file
     //
-    $strsql = "SELECT ciniki_membersonly_page_files.id, "
-        . "ciniki_membersonly_page_files.name, "
-        . "ciniki_membersonly_page_files.extension, "
-        . "ciniki_membersonly_page_files.binary_content "
-        . "FROM ciniki_membersonly_page_files "
-        . "WHERE id = '" . ciniki_core_dbQuote($ciniki, $args['file_id']) . "' "
-        . "AND tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
+    $strsql = "SELECT files.id, "
+        . "files.uuid, "
+        . "tenants.uuid AS tenant_uuid, "
+        . "files.name, "
+        . "files.extension, "
+        . "files.binary_content "
+        . "FROM ciniki_membersonly_page_files AS files, ciniki_tenants AS tenants "
+        . "WHERE files.id = '" . ciniki_core_dbQuote($ciniki, $args['file_id']) . "' "
+        . "AND files.tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
+        . "AND files.tnid = tenants.id "
+        . "AND tenants.id = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
         . "";
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbHashQuery');
     $rc = ciniki_core_dbHashQuery($ciniki, $strsql, 'ciniki.membersonly', 'file');
@@ -56,8 +60,9 @@ function ciniki_membersonly_pageFileDownload($ciniki) {
         return $rc;
     }
     if( !isset($rc['file']) ) {
-        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.membersonly.13', 'msg'=>'Unable to find file'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.membersonly.32', 'msg'=>'Unable to find file'));
     }
+    $file = $rc['file'];
     $filename = $rc['file']['name'] . '.' . $rc['file']['extension'];
 
     header("Expires: Mon, 26 Jul 1997 05:00:00 GMT"); 
@@ -72,12 +77,23 @@ function ciniki_membersonly_pageFileDownload($ciniki) {
     } else {
         return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.membersonly.14', 'msg'=>'Unsupported file type'));
     }
+
+    $storage_filename = $ciniki['config']['ciniki.core']['storage_dir'] . '/'
+        . $file['tenant_uuid'][0] . '/' . $file['tenant_uuid']
+        . '/ciniki.membersonly/'
+        . $file['uuid'][0] . '/' . $file['uuid'];
+    if( !file_exists($storage_filename) ) {
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.membersonly.31', 'msg'=>'File does not exist.'));
+    }
+//    $file['binary_content'] = 
+    $binary_content = file_get_contents($storage_filename);
+
     // Specify Filename
     header('Content-Disposition: attachment;filename="' . $filename . '"');
-    header('Content-Length: ' . strlen($rc['file']['binary_content']));
+    header('Content-Length: ' . strlen($binary_content));
     header('Cache-Control: max-age=0');
 
-    print $rc['file']['binary_content'];
+    print $binary_content;
     exit();
     
     return array('stat'=>'binary');

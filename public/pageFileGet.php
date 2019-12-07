@@ -63,7 +63,7 @@ function ciniki_membersonly_pageFileGet($ciniki) {
         return $rc;
     }
     if( !isset($rc['file']) ) {
-        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.membersonly.15', 'msg'=>'Unable to find file'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.membersonly.34', 'msg'=>'Unable to find file'));
     }
     
     return array('stat'=>'ok', 'file'=>$rc['file']);

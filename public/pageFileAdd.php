@@ -81,7 +81,7 @@ function ciniki_membersonly_pageFileAdd(&$ciniki) {
     // Make sure a file was submitted
     //
     if( !isset($_FILES) || !isset($_FILES['uploadfile']) || $_FILES['uploadfile']['tmp_name'] == '' ) {
-        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.membersonly.10', 'msg'=>'No file specified.'));
+        return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.membersonly.30', 'msg'=>'No file specified.'));
     }
 
     $args['org_filename'] = $_FILES['uploadfile']['name'];
@@ -93,7 +93,19 @@ function ciniki_membersonly_pageFileAdd(&$ciniki) {
     if( $args['extension'] != 'pdf' && $args['extension'] != 'mp3' ) {
         return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.membersonly.11', 'msg'=>'Not a supported file type.'));
     }
-    $args['binary_content'] = file_get_contents($_FILES['uploadfile']['tmp_name']);
+//    $args['binary_content'] = file_get_contents($_FILES['uploadfile']['tmp_name']);
+
+    //
+    // Move the file into storage
+    //
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'storageFileAdd');
+    $rc = ciniki_core_storageFileAdd($ciniki, $args['tnid'], 'ciniki.membersonly.page_file', array(
+        'filename'=>$_FILES['uploadfile']['name']));
+    if( $rc['stat'] != 'ok' ) {
+        return $rc;
+    }
+    $args['uuid'] = $rc['uuid'];
+    $args['binary_content'] = '';
 
     //
     // Add the file to the database
