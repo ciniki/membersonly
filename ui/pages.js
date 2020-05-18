@@ -268,16 +268,15 @@ function ciniki_membersonly_pages() {
             };
             this[pn].deletePage = function() {
                 var p = this;
-                if( confirm('Are you sure you want to delete this page? All files and images will also be removed from this page.') ) {
-                    M.api.getJSONCb('ciniki.membersonly.pageDelete', {'tnid':M.curTenantID, 
-                        'page_id':p.page_id}, function(rsp) {
-                            if( rsp.stat != 'ok' ) {
-                                M.api.err(rsp);
-                                return false;
-                            }
-                            p.close();
-                        });
-                }
+                M.confirm('Are you sure you want to delete this page? All files and images will also be removed from this page.',null,function() {
+                    M.api.getJSONCb('ciniki.membersonly.pageDelete', {'tnid':M.curTenantID, 'page_id':p.page_id}, function(rsp) {
+                        if( rsp.stat != 'ok' ) {
+                            M.api.err(rsp);
+                            return false;
+                        }
+                        p.close();
+                    });
+                });
             };
         }
 
@@ -318,7 +317,7 @@ function ciniki_membersonly_pages() {
         //
         var appContainer = M.createContainer(appPrefix, 'ciniki_membersonly_pages', 'yes');
         if( appContainer == null ) {
-            alert('App Error');
+            M.alert('App Error');
             return false;
         } 
 
