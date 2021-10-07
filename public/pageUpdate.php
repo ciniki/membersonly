@@ -52,7 +52,7 @@ function ciniki_membersonly_pageUpdate(&$ciniki) {
     //
     // Get the existing page details 
     //
-    $strsql = "SELECT id, parent_id, uuid "
+    $strsql = "SELECT id, parent_id, sequence, uuid "
         . "FROM ciniki_membersonly_pages "
         . "WHERE tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
         . "AND id = '" . ciniki_core_dbQuote($ciniki, $args['page_id']) . "' "
@@ -88,10 +88,54 @@ function ciniki_membersonly_pageUpdate(&$ciniki) {
         }
     }
 
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbTransactionStart');
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbTransactionRollback');
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbTransactionCommit');
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'dbAddModuleHistory');
+    $rc = ciniki_core_dbTransactionStart($ciniki, 'ciniki.membersonly');
+    if( $rc['stat'] != 'ok' ) {
+        return $rc;
+    }
+
     //
     // Update the page in the database
     //
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectUpdate');
-    return ciniki_core_objectUpdate($ciniki, $args['tnid'], 'ciniki.membersonly.page', $args['page_id'], $args);
+    $rc = ciniki_core_objectUpdate($ciniki, $args['tnid'], 'ciniki.membersonly.page', $args['page_id'], $args);
+    if( $rc['stat'] != 'ok' ) {
+        ciniki_core_dbTransactionRollback($ciniki, 'ciniki.membersonly');
+        return $rc;
+    }
+
+    //
+    // Update any sequences
+    //
+    if( isset($args['sequence']) ) {
+        $parent_id = isset($args['parent_id']) ? $args['parent_id'] : $item['parent_id'];
+        ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'sequencesUpdate');
+        $rc = ciniki_core_sequencesUpdate($ciniki, $args['tnid'], 'ciniki.membersonly.page', 'parent_id', $parent_id, 
+            $args['sequence'], $item['sequence']);
+        if( $rc['stat'] != 'ok' ) {
+            ciniki_core_dbTransactionRollback($ciniki, 'ciniki.membersonly');
+            return $rc;
+        }
+    }
+
+    //
+    // Commit the changes to the database
+    //
+    $rc = ciniki_core_dbTransactionCommit($ciniki, 'ciniki.membersonly');
+    if( $rc['stat'] != 'ok' ) {
+        return $rc;
+    }
+
+    //
+    // Update the last_change date in the tenant modules
+    // Ignore the result, as we don't want to stop user updates if this fails.
+    //
+    ciniki_core_loadMethod($ciniki, 'ciniki', 'tenants', 'private', 'updateModuleChangeDate');
+    ciniki_tenants_updateModuleChangeDate($ciniki, $args['tnid'], 'ciniki', 'membersonly');
+
+    return array('stat'=>'ok');
 }
 ?>

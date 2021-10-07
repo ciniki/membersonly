@@ -141,7 +141,7 @@ function ciniki_membersonly_pageGet($ciniki) {
         // Get the child items
         //
         if( isset($args['children']) && $args['children'] == 'yes' ) {
-            $strsql = "SELECT id, title "
+            $strsql = "SELECT id, title, sequence "
                 . "FROM ciniki_membersonly_pages "
                 . "WHERE parent_id = '" . ciniki_core_dbQuote($ciniki, $args['page_id']) . "' "
                 . "AND tnid = '" . ciniki_core_dbQuote($ciniki, $args['tnid']) . "' "
@@ -149,7 +149,7 @@ function ciniki_membersonly_pageGet($ciniki) {
                 . "";
             $rc = ciniki_core_dbHashQueryTree($ciniki, $strsql, 'ciniki.membersonly', array(
                 array('container'=>'pages', 'fname'=>'id', 'name'=>'page',
-                    'fields'=>array('id', 'title')),
+                    'fields'=>array('id', 'title', 'sequence')),
                     ));
             if( $rc['stat'] != 'ok' ) {
                 return $rc;
@@ -170,6 +170,7 @@ function ciniki_membersonly_pageGet($ciniki) {
         if( $rc['stat'] != 'ok' ) {
             return $rc;
         }
+            error_log(print_r($rc,true));
         if( isset($rc['max']['sequence']) ) {
             $sequence = $rc['max']['sequence'] + 1;
         } else {

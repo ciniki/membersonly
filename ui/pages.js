@@ -90,6 +90,20 @@ function ciniki_membersonly_pages() {
                     'child_title':{'label':'', 'hidelabel':'yes', 'type':'text'},
                 }},
                 'pages':{'label':'', 'type':'simplegrid', 'num_cols':1, 
+                    'seqDrop':function(e,from,to) {
+                        M.ciniki_membersonly_pages[pn].savePos();
+                        M.api.getJSONCb('ciniki.membersonly.pageUpdate', {'tnid':M.curTenantID, 
+                            'page_id':M.ciniki_membersonly_pages[pn].data.pages[from].page.id,
+                            'parent_id':M.ciniki_membersonly_pages[pn].page_id,
+                            'sequence':M.ciniki_membersonly_pages[pn].data.pages[to].page.sequence, 
+                            }, function(rsp) {
+                                if( rsp.stat != 'ok' ) {
+                                    M.api.err(rsp);
+                                    return false;
+                                }
+                                M.ciniki_membersonly_pages[pn].updateChildren();
+                            });
+                        },
                     'addTxt':'Add Child Page',
                     'addFn':'M.ciniki_membersonly_pages.'+pn+'.childEdit(0);',
                     },
@@ -347,7 +361,7 @@ function ciniki_membersonly_pages() {
     this.pageEdit = function(cb, pid, parent_id) {
         M.api.getJSONCb('ciniki.membersonly.pageGet', {'tnid':M.curTenantID,
             'page_id':pid, 'images':'yes', 'files':'yes', 
-                'children':'yes', 'parentlist':'yes'}, function(rsp) {
+                'children':'yes', 'parentlist':'yes', 'parent_id':parent_id}, function(rsp) {
                 if( rsp.stat != 'ok' ) {
                     M.api.err(rsp);
                     return false;
