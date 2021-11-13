@@ -170,7 +170,6 @@ function ciniki_membersonly_pageGet($ciniki) {
         if( $rc['stat'] != 'ok' ) {
             return $rc;
         }
-            error_log(print_r($rc,true));
         if( isset($rc['max']['sequence']) ) {
             $sequence = $rc['max']['sequence'] + 1;
         } else {
