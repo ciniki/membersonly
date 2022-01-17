@@ -90,7 +90,7 @@ function ciniki_membersonly_pageFileAdd(&$ciniki) {
     //
     // Check the extension is a PDF, currently only accept PDF files
     //
-    if( $args['extension'] != 'pdf' && $args['extension'] != 'mp3' ) {
+    if( $args['extension'] != 'pdf' && $args['extension'] != 'mp3' && $args['extension'] != 'wif' ) {
         return array('stat'=>'fail', 'err'=>array('code'=>'ciniki.membersonly.11', 'msg'=>'Not a supported file type.'));
     }
 //    $args['binary_content'] = file_get_contents($_FILES['uploadfile']['tmp_name']);
