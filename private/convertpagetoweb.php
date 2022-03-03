@@ -25,7 +25,7 @@ function ciniki_membersonly_convertpagetoweb(&$ciniki, $tnid, $parent_id, $page,
     $page['page_redirect_url'] = '';
     $page['page_module'] = '';
     $page['menu_flags'] = 0x01;
-    $page['flags'] |= 0x14;
+    $page['flags'] |= 0x15;
 
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'objectAdd');
     $rc = ciniki_core_objectAdd($ciniki, $tnid, 'ciniki.web.page', $page, 0x04);

@@ -19,9 +19,7 @@ function ciniki_membersonly_convertweb() {
         this.show(cb);
     }
     this.menu.convert = function() {
-        var pagename = this.formValue('pagename');
-        console.log(pagename);
-        M.api.getJSONCb('ciniki.membersonly.convertweb', {'tnid':M.curTenantID, 'pagename':pagename}, function(rsp) {
+        M.api.getJSONCb('ciniki.membersonly.convertweb', {'tnid':M.curTenantID}, function(rsp) {
             if( rsp.stat != 'ok' ) {
                 M.api.err(rsp);
                 return false;

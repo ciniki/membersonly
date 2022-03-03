@@ -30,15 +30,12 @@ function ciniki_membersonly_convertweb(&$ciniki) {
     ciniki_core_loadMethod($ciniki, 'ciniki', 'core', 'private', 'prepareArgs');
     $rc = ciniki_core_prepareArgs($ciniki, 'no', array(
         'tnid'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'Tenant'), 
-        'pagename'=>array('required'=>'yes', 'blank'=>'no', 'name'=>'New Page Name'), 
         )); 
     if( $rc['stat'] != 'ok' ) { 
         return $rc;
     }   
     $args = $rc['args'];
 
-//ini_set('memory_limit', '1024M');
-    
     //
     // Load the tenant UUID for storage
     //
